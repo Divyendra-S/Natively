@@ -51,7 +51,7 @@ export function useAuth() {
 
   useEffect(() => {
     let mounted = true;
-    let authSubscription: any = null;
+    let authSubscription: { data?: { subscription?: { unsubscribe?: () => void } } } | null = null;
 
     // Get initial session
     const getInitialSession = async () => {
@@ -117,8 +117,8 @@ export function useAuth() {
 
     return () => {
       mounted = false;
-      if (authSubscription) {
-        authSubscription.unsubscribe();
+      if (authSubscription?.data?.subscription?.unsubscribe) {
+        authSubscription.data.subscription.unsubscribe();
       }
     };
   }, []);

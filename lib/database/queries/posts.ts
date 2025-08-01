@@ -14,8 +14,7 @@ export async function getPost(
     .from('posts')
     .select('*')
     .eq('id', postId)
-    .single()
-    .abortSignal(signal);
+    .single();
 
   if (error) throw error;
   return data;
@@ -28,8 +27,7 @@ export async function getPosts(
   const { data, error } = await supabase
     .from('posts')
     .select('*')
-    .order('created_at', { ascending: false })
-    .abortSignal(signal);
+    .order('created_at', { ascending: false });
 
   if (error) throw error;
   return data || [];
@@ -43,8 +41,7 @@ export async function getPublishedPosts(
     .from('posts')
     .select('*')
     .eq('published', true)
-    .order('created_at', { ascending: false })
-    .abortSignal(signal);
+    .order('created_at', { ascending: false });
 
   if (error) throw error;
   return data || [];
@@ -59,8 +56,7 @@ export async function getUserPosts(
     .from('posts')
     .select('*')
     .eq('user_id', userId)
-    .order('created_at', { ascending: false })
-    .abortSignal(signal);
+    .order('created_at', { ascending: false });
 
   if (error) throw error;
   return data || [];

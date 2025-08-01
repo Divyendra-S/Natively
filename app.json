@@ -33,6 +33,26 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Natively to access your camera to capture photos for AI analysis and editing."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Natively to access your photos to select images for AI analysis and editing.",
+          "cameraPermission": "Allow Natively to access your camera to capture photos for AI analysis and editing."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow Natively to save edited images to your photo library.",
+          "savePhotosPermission": "Allow Natively to save edited images to your photo library."
+        }
       ]
     ],
     "experiments": {

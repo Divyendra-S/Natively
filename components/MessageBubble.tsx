@@ -13,8 +13,8 @@ interface MessageBubbleProps {
 export function MessageBubble({ message, isLoading = false }: MessageBubbleProps) {
   const isUser = message.sender === 'user';
   
-  const userGradientColors = ['#3b82f6', '#1e40af'];
-  const aiGradientColors = ['rgba(255, 255, 255, 0.08)', 'rgba(255, 255, 255, 0.03)'];
+  const userGradientColors = ['#3b82f6', '#1e40af'] as const;
+  const aiGradientColors = ['rgba(255, 255, 255, 0.08)', 'rgba(255, 255, 255, 0.03)'] as const;
   const bubbleTextColor = '#FFFFFF';
 
   const formatTime = (date: Date) => {

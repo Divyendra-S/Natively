@@ -14,8 +14,7 @@ export async function getUser(
     .from('users')
     .select('*')
     .eq('id', userId)
-    .single()
-    .abortSignal(signal);
+    .single();
 
   if (error) throw error;
   return data;
@@ -30,8 +29,7 @@ export async function getUserByEmail(
     .from('users')
     .select('*')
     .eq('email', email)
-    .single()
-    .abortSignal(signal);
+    .single();
 
   if (error) throw error;
   return data;
@@ -44,8 +42,7 @@ export async function getUsers(
   const { data, error } = await supabase
     .from('users')
     .select('*')
-    .order('created_at', { ascending: false })
-    .abortSignal(signal);
+    .order('created_at', { ascending: false });
 
   if (error) throw error;
   return data || [];

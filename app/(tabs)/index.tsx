@@ -1,10 +1,10 @@
-import { MainApp } from '@/components/MainApp';
 import { AuthenticationFlow } from '@/components/AuthenticationFlow';
+import GalleryScreen from '../../screens/GalleryScreen';
 
 export default function HomeScreen() {
   return (
     <AuthenticationFlow>
-      <MainApp />
+      <GalleryScreen />
     </AuthenticationFlow>
   );
 } 

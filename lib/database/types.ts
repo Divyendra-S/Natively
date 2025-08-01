@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      images: {
+        Row: {
+          analysis_data: Json | null
+          created_at: string | null
+          id: string
+          original_url: string
+          processed_url: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          analysis_data?: Json | null
+          created_at?: string | null
+          id?: string
+          original_url: string
+          processed_url?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          analysis_data?: Json | null
+          created_at?: string | null
+          id?: string
+          original_url?: string
+          processed_url?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       posts: {
         Row: {
           content: string | null
@@ -51,6 +84,113 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      processing_queue: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          error_message: string | null
+          id: string
+          image_id: string | null
+          max_retries: number | null
+          metadata: Json | null
+          operation_type: string
+          priority: number | null
+          retry_count: number | null
+          started_at: string | null
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          image_id?: string | null
+          max_retries?: number | null
+          metadata?: Json | null
+          operation_type: string
+          priority?: number | null
+          retry_count?: number | null
+          started_at?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          image_id?: string | null
+          max_retries?: number | null
+          metadata?: Json | null
+          operation_type?: string
+          priority?: number | null
+          retry_count?: number | null
+          started_at?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "processing_queue_image_id_fkey"
+            columns: ["image_id"]
+            isOneToOne: false
+            referencedRelation: "images"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_preferences: {
+        Row: {
+          analysis_intensity: string | null
+          auto_analyze: boolean | null
+          auto_enhance: boolean | null
+          created_at: string | null
+          custom_settings: Json | null
+          editing_style: string | null
+          enhancement_strength: number | null
+          id: string
+          notify_analysis_complete: boolean | null
+          notify_processing_complete: boolean | null
+          preserve_originals: boolean | null
+          processing_quality: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          analysis_intensity?: string | null
+          auto_analyze?: boolean | null
+          auto_enhance?: boolean | null
+          created_at?: string | null
+          custom_settings?: Json | null
+          editing_style?: string | null
+          enhancement_strength?: number | null
+          id?: string
+          notify_analysis_complete?: boolean | null
+          notify_processing_complete?: boolean | null
+          preserve_originals?: boolean | null
+          processing_quality?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          analysis_intensity?: string | null
+          auto_analyze?: boolean | null
+          auto_enhance?: boolean | null
+          created_at?: string | null
+          custom_settings?: Json | null
+          editing_style?: string | null
+          enhancement_strength?: number | null
+          id?: string
+          notify_analysis_complete?: boolean | null
+          notify_processing_complete?: boolean | null
+          preserve_originals?: boolean | null
+          processing_quality?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       users: {
         Row: {
