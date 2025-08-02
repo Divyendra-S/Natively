@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   gridContentContainer: {
-    paddingBottom: 20,
+    paddingBottom: 30,
   },
   emptyTitle: {
     fontSize: 24,
