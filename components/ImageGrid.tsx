@@ -1,19 +1,18 @@
-import React from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
   ActivityIndicator,
-} from 'react-native';
-import { Image } from 'expo-image';
-import { FlatGrid } from 'react-native-super-grid';
-import { Ionicons } from '@expo/vector-icons';
-import type { Image as ImageType } from '../lib/database/queries/images';
+  Dimensions,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-const { width } = Dimensions.get('window');
-const ITEM_SIZE = (width - 40) / 3; // 3 columns with padding
+import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
+import type { Image as ImageType } from "../lib/database/queries/images";
+
+const { width } = Dimensions.get("window");
 
 interface ImageGridProps {
   images: ImageType[];
@@ -30,19 +29,26 @@ export default function ImageGrid({
   onImagePress,
   onRefresh,
   refreshing = false,
-  emptyMessage = 'No images yet',
+  emptyMessage = "No images yet",
 }: ImageGridProps) {
+  // Calculate item size for 2 columns with proper spacing
+  const horizontalPadding = 20; // Padding on left and right sides
+  const itemSpacing = 8; // Space between items
+  const availableWidth = width - horizontalPadding * 2;
+  const ITEM_SIZE = Math.floor((availableWidth - itemSpacing) / 2);
   const getStatusIcon = (status: string | null) => {
     switch (status) {
-      case 'analyzing':
+      case "analyzing":
         return <Ionicons name="analytics" size={16} color="#007AFF" />;
-      case 'analyzed':
+      case "analyzed":
         return <Ionicons name="checkmark-circle" size={16} color="#34C759" />;
-      case 'processing':
+      case "processing":
         return <Ionicons name="settings" size={16} color="#FF9500" />;
-      case 'processed':
-        return <Ionicons name="checkmark-circle-outline" size={16} color="#34C759" />;
-      case 'failed':
+      case "processed":
+        return (
+          <Ionicons name="checkmark-circle-outline" size={16} color="#34C759" />
+        );
+      case "failed":
         return <Ionicons name="close-circle" size={16} color="#FF3B30" />;
       default:
         return <Ionicons name="image" size={16} color="#8E8E93" />;
@@ -51,52 +57,75 @@ export default function ImageGrid({
 
   const getStatusColor = (status: string | null) => {
     switch (status) {
-      case 'analyzing':
-        return '#007AFF';
-      case 'analyzed':
-        return '#34C759';
-      case 'processing':
-        return '#FF9500';
-      case 'processed':
-        return '#34C759';
-      case 'failed':
-        return '#FF3B30';
+      case "analyzing":
+        return "#007AFF";
+      case "analyzed":
+        return "#34C759";
+      case "processing":
+        return "#FF9500";
+      case "processed":
+        return "#34C759";
+      case "failed":
+        return "#FF3B30";
       default:
-        return '#8E8E93';
+        return "#8E8E93";
     }
   };
 
-  const renderImageItem = ({ item }: { item: ImageType }) => (
-    <TouchableOpacity
-      style={styles.imageItem}
-      onPress={() => onImagePress(item)}
-      activeOpacity={0.8}
-    >
-      <Image
-        source={{ uri: item.original_url }}
-        style={styles.image}
-        contentFit="cover"
-        transition={200}
-        placeholder={{
-          blurhash: 'L6PZfSi_.AyE_3t7t7R**0o#DgR4',
-        }}
-      />
-      
-      {/* Status overlay */}
-      <View style={styles.statusOverlay}>
-        <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
-          {getStatusIcon(item.status)}
-        </View>
-      </View>
+  const renderImageItem = ({
+    item,
+    index,
+  }: {
+    item: ImageType;
+    index: number;
+  }) => {
+    const isLeftColumn = index % 2 === 0;
 
-      {/* Processing indicator */}
-      {(item.status === 'analyzing' || item.status === 'processing') && (
-        <View style={styles.processingOverlay}>
-          <ActivityIndicator size="small" color="white" />
+    return (
+      <TouchableOpacity
+        style={[
+          styles.imageItem,
+          {
+            width: ITEM_SIZE,
+            marginLeft: isLeftColumn ? 0 : itemSpacing / 2,
+            marginRight: isLeftColumn ? itemSpacing / 2 : 0,
+            marginBottom: itemSpacing,
+          },
+        ]}
+        onPress={() => onImagePress(item)}
+        activeOpacity={0.8}
+      >
+        <Image
+          source={{ uri: item.original_url }}
+          style={styles.image}
+          contentFit="cover"
+          transition={200}
+          placeholder={{
+            blurhash: "L6PZfSi_.AyE_3t7t7R**0o#DgR4",
+          }}
+        />
+
+        {/* Status overlay */}
+        <View style={styles.statusOverlay}>
+          <View
+            style={[
+              styles.statusBadge,
+              { backgroundColor: getStatusColor(item.status) },
+            ]}
+          >
+            {getStatusIcon(item.status)}
+          </View>
         </View>
-      )}
-    </TouchableOpacity>
-  );
+
+        {/* Processing indicator */}
+        {(item.status === "analyzing" || item.status === "processing") && (
+          <View style={styles.processingOverlay}>
+            <ActivityIndicator size="small" color="white" />
+          </View>
+        )}
+      </TouchableOpacity>
+    );
+  };
 
   const renderEmpty = () => (
     <View style={styles.emptyContainer}>
@@ -119,16 +148,19 @@ export default function ImageGrid({
 
   return (
     <View style={styles.container}>
-      <FlatGrid
-        itemDimension={ITEM_SIZE}
+      <FlatList
         data={images}
         style={styles.grid}
-        spacing={8}
         renderItem={renderImageItem}
         ListEmptyComponent={renderEmpty}
         showsVerticalScrollIndicator={false}
         onRefresh={onRefresh}
         refreshing={refreshing}
+        numColumns={2}
+        key="grid-2-columns"
+        contentContainerStyle={
+          images.length === 0 ? styles.emptyContentContainer : undefined
+        }
       />
     </View>
   );
@@ -137,17 +169,18 @@ export default function ImageGrid({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: "#F2F2F7",
   },
   grid: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
   },
   imageItem: {
     borderRadius: 12,
-    overflow: 'hidden',
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
+    overflow: "hidden",
+    backgroundColor: "#FFFFFF",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -157,11 +190,11 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   image: {
-    width: '100%',
+    width: "100%",
     aspectRatio: 1,
   },
   statusOverlay: {
-    position: 'absolute',
+    position: "absolute",
     top: 8,
     right: 8,
   },
@@ -169,48 +202,51 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
   },
   processingOverlay: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 8,
     left: 8,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
     borderRadius: 12,
     padding: 6,
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F2F2F7',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F2F2F7",
   },
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#8E8E93',
-    fontWeight: '500',
+    color: "#8E8E93",
+    fontWeight: "500",
   },
   emptyContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 40,
     paddingVertical: 60,
   },
+  emptyContentContainer: {
+    flex: 1,
+  },
   emptyTitle: {
     fontSize: 24,
-    fontWeight: '600',
-    color: '#1C1C1E',
+    fontWeight: "600",
+    color: "#1C1C1E",
     marginTop: 24,
     marginBottom: 8,
   },
   emptySubtitle: {
     fontSize: 16,
-    color: '#8E8E93',
-    textAlign: 'center',
+    color: "#8E8E93",
+    textAlign: "center",
     lineHeight: 22,
   },
 });

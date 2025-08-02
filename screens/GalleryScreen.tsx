@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -215,9 +216,14 @@ export default function GalleryScreen() {
 
       {/* Filter Tabs */}
       <View style={styles.filterContainer}>
-        <View style={styles.filterScrollView}>
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          style={styles.filterScrollView}
+          contentContainerStyle={styles.filterScrollContent}
+        >
           {filterOptions.map(renderFilterButton)}
-        </View>
+        </ScrollView>
       </View>
 
       {/* Image Grid */}
@@ -288,15 +294,19 @@ const styles = StyleSheet.create({
     borderBottomColor: '#E5E5EA',
   },
   filterScrollView: {
-    flexDirection: 'row',
     paddingHorizontal: 20,
+  },
+  filterScrollContent: {
+    flexDirection: 'row',
     gap: 12,
+    paddingRight: 20, // Extra padding at the end for better scrolling
   },
   filterButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
     backgroundColor: '#F2F2F7',
+    minWidth: 60, // Minimum width to prevent very narrow buttons
   },
   filterButtonActive: {
     backgroundColor: '#007AFF',
