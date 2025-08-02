@@ -2,12 +2,17 @@
 
 ## Issue Description
 
-The ImageGrid component in the Gallery Screen had a spacing issue where:
+The ImageGrid component in the Gallery Screen had multiple spacing issues:
 
+### Primary Issue:
 - Images had excessive space on the left side
 - Images were overflowing or touching the right edge of the screen
 - Uneven distribution of images across the screen width
 - Poor visual alignment and inconsistent spacing
+
+### Secondary Issue:
+- No bottom padding when scrolling to the end of the image list
+- Last row of images would touch the bottom edge of the screen
 
 ## Root Cause Analysis
 
@@ -85,7 +90,24 @@ const availableWidth = width - horizontalPadding * 2;
 const ITEM_SIZE = Math.floor((availableWidth - itemSpacing) / 2);
 ```
 
-### 4. Removed Unnecessary Dependencies
+### 4. Added Bottom Padding
+Added proper bottom padding to prevent the last row of images from touching the screen edge:
+
+```typescript
+// Added content container style for grid
+contentContainerStyle={
+  images.length === 0 
+    ? styles.emptyContentContainer 
+    : styles.gridContentContainer
+}
+
+// New style for bottom padding
+gridContentContainer: {
+  paddingBottom: 20,
+},
+```
+
+### 5. Removed Unnecessary Dependencies
 
 - Removed `useSafeAreaInsets` import and usage
 - Removed `react-native-super-grid` dependency from this component
@@ -139,6 +161,7 @@ The new spacing system works as follows:
 ✅ **Equal spacing on both sides**: 20px padding maintained on left and right  
 ✅ **Consistent item spacing**: 8px gap between columns and rows  
 ✅ **No overflow**: Images properly contained within screen bounds  
+✅ **Bottom padding**: 20px padding at the end of the scroll view  
 ✅ **Responsive design**: Works across different screen sizes  
 ✅ **Improved performance**: Removed dependency on external grid library
 

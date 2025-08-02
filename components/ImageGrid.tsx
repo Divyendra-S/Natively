@@ -159,7 +159,9 @@ export default function ImageGrid({
         numColumns={2}
         key="grid-2-columns"
         contentContainerStyle={
-          images.length === 0 ? styles.emptyContentContainer : undefined
+          images.length === 0 
+            ? styles.emptyContentContainer 
+            : styles.gridContentContainer
         }
       />
     </View>
@@ -235,6 +237,9 @@ const styles = StyleSheet.create({
   },
   emptyContentContainer: {
     flex: 1,
+  },
+  gridContentContainer: {
+    paddingBottom: 20,
   },
   emptyTitle: {
     fontSize: 24,
