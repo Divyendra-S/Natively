@@ -5,9 +5,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
-  SafeAreaView,
-  StatusBar,
 } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import { router, useFocusEffect } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
@@ -24,6 +24,7 @@ type FilterType = 'all' | 'uploaded' | 'analyzed' | 'processed' | 'failed';
 export default function GalleryScreen() {
   const [filter, setFilter] = useState<FilterType>('all');
   const [uploading, setUploading] = useState(false);
+  const insets = useSafeAreaInsets();
   
   const { user } = useAuth();
   const supabase = useSupabase();
@@ -188,11 +189,12 @@ export default function GalleryScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F2F2F7" />
+    <>
+      <StatusBar style="dark" backgroundColor="#FFFFFF" />
+      <SafeAreaView style={styles.container} edges={['left', 'right']}>
       
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
         <Text style={styles.headerTitle}>AI Gallery</Text>
         <View style={styles.headerButtons}>
           <TouchableOpacity
@@ -219,18 +221,20 @@ export default function GalleryScreen() {
       </View>
 
       {/* Image Grid */}
-      <ImageGrid
-        images={filteredImages}
-        loading={isLoading}
-        onImagePress={handleImagePress}
-        onRefresh={refetch}
-        refreshing={isRefetching}
-        emptyMessage={
-          filter === 'all' 
-            ? 'No images yet' 
-            : `No ${filter} images`
-        }
-      />
+      <View style={styles.contentArea}>
+        <ImageGrid
+          images={filteredImages}
+          loading={isLoading}
+          onImagePress={handleImagePress}
+          onRefresh={refetch}
+          refreshing={isRefetching}
+          emptyMessage={
+            filter === 'all' 
+              ? 'No images yet' 
+              : `No ${filter} images`
+          }
+        />
+      </View>
 
       {/* Upload indicator */}
       {uploading && (
@@ -240,21 +244,22 @@ export default function GalleryScreen() {
           </View>
         </View>
       )}
-    </SafeAreaView>
+      </SafeAreaView>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2F2F7',
+    backgroundColor: '#FFFFFF',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingBottom: 16,
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#E5E5EA',
@@ -307,6 +312,10 @@ const styles = StyleSheet.create({
   filterCount: {
     fontSize: 12,
     fontWeight: '400',
+  },
+  contentArea: {
+    flex: 1,
+    backgroundColor: '#F2F2F7',
   },
   uploadingOverlay: {
     position: 'absolute',

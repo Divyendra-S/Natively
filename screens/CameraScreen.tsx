@@ -5,9 +5,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
-  StatusBar,
   ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
@@ -24,6 +25,7 @@ export default function CameraScreen() {
   const [isCapturing, setIsCapturing] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
+  const insets = useSafeAreaInsets();
   
   const { user } = useAuth();
   const supabase = useSupabase();
@@ -165,8 +167,9 @@ export default function CameraScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+    <>
+      <StatusBar style="light" backgroundColor="#000000" />
+      <SafeAreaView style={styles.container} edges={['left', 'right']}>
       
       <CameraView
         ref={cameraRef}
@@ -176,7 +179,7 @@ export default function CameraScreen() {
       />
       
       {/* Header - positioned absolutely over camera */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
         <TouchableOpacity
           style={styles.headerButton}
           onPress={goBack}
@@ -228,7 +231,8 @@ export default function CameraScreen() {
           <Text style={styles.controlText}>Flip</Text>
         </TouchableOpacity>
       </View>
-    </View>
+      </SafeAreaView>
+    </>
   );
 }
 

@@ -6,9 +6,9 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
-  SafeAreaView,
-  StatusBar,
 } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -28,6 +28,7 @@ interface ProcessingStep {
 
 export default function ProcessingScreen() {
   const { imageId } = useLocalSearchParams<{ imageId: string }>();
+  const insets = useSafeAreaInsets();
   const [steps, setSteps] = useState<ProcessingStep[]>([]);
   const [analysisResult, setAnalysisResult] = useState<ImageAnalysisResult | null>(null);
   
@@ -237,11 +238,12 @@ export default function ProcessingScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F2F2F7" />
+    <>
+      <StatusBar style="dark" backgroundColor="#F2F2F7" />
+      <SafeAreaView style={styles.container} edges={['left', 'right']}>
       
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
         <TouchableOpacity style={styles.backButton} onPress={goBack}>
           <Ionicons name="arrow-back" size={24} color="#007AFF" />
         </TouchableOpacity>
@@ -343,7 +345,8 @@ export default function ProcessingScreen() {
           )}
         </View>
       </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </>
   );
 }
 

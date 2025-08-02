@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-  SafeAreaView,
-  StatusBar,
   Share,
 } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -23,6 +23,7 @@ export default function ResultsScreen() {
   const { imageId } = useLocalSearchParams<{ imageId: string }>();
   const [showComparison, setShowComparison] = useState(true);
   const [saving, setSaving] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const {
     data: image,
@@ -140,11 +141,12 @@ export default function ResultsScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F2F2F7" />
+    <>
+      <StatusBar style="dark" backgroundColor="#F2F2F7" />
+      <SafeAreaView style={styles.container} edges={['left', 'right']}>
       
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
         <TouchableOpacity style={styles.headerButton} onPress={goBack}>
           <Ionicons name="arrow-back" size={24} color="#007AFF" />
         </TouchableOpacity>
@@ -262,7 +264,8 @@ export default function ResultsScreen() {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </>
   );
 }
 

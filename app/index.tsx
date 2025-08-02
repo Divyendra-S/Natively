@@ -1,5 +1,5 @@
 import { AuthenticationFlow } from '@/components/AuthenticationFlow';
-import GalleryScreen from '../../screens/GalleryScreen';
+import GalleryScreen from '../screens/GalleryScreen';
 
 export default function HomeScreen() {
   return (
@@ -7,4 +7,4 @@ export default function HomeScreen() {
       <GalleryScreen />
     </AuthenticationFlow>
   );
-} 
+}
