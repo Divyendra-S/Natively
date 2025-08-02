@@ -14,6 +14,85 @@ export type Database = {
   }
   public: {
     Tables: {
+      editing_feedback: {
+        Row: {
+          created_at: string | null
+          editing_session_id: string | null
+          feedback_type: string | null
+          id: string
+          specific_feedback: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          editing_session_id?: string | null
+          feedback_type?: string | null
+          id?: string
+          specific_feedback?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          editing_session_id?: string | null
+          feedback_type?: string | null
+          id?: string
+          specific_feedback?: Json | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "editing_feedback_editing_session_id_fkey"
+            columns: ["editing_session_id"]
+            isOneToOne: false
+            referencedRelation: "image_editing_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      image_editing_sessions: {
+        Row: {
+          algorithms_applied: string[]
+          config_used: Json
+          created_at: string | null
+          id: string
+          image_id: string | null
+          processing_time_ms: number | null
+          quality_improvement_score: number | null
+          user_id: string | null
+          user_rating: number | null
+        }
+        Insert: {
+          algorithms_applied: string[]
+          config_used: Json
+          created_at?: string | null
+          id?: string
+          image_id?: string | null
+          processing_time_ms?: number | null
+          quality_improvement_score?: number | null
+          user_id?: string | null
+          user_rating?: number | null
+        }
+        Update: {
+          algorithms_applied?: string[]
+          config_used?: Json
+          created_at?: string | null
+          id?: string
+          image_id?: string | null
+          processing_time_ms?: number | null
+          quality_improvement_score?: number | null
+          user_id?: string | null
+          user_rating?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "image_editing_sessions_image_id_fkey"
+            columns: ["image_id"]
+            isOneToOne: false
+            referencedRelation: "images"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       images: {
         Row: {
           analysis_data: Json | null
@@ -141,16 +220,56 @@ export type Database = {
           },
         ]
       }
+      user_editing_profiles: {
+        Row: {
+          average_enhancement_strength: number | null
+          created_at: string | null
+          favorite_looks: string[] | null
+          id: string
+          image_type_preferences: Json | null
+          preferred_algorithms: Json | null
+          style_preferences: Json | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          average_enhancement_strength?: number | null
+          created_at?: string | null
+          favorite_looks?: string[] | null
+          id?: string
+          image_type_preferences?: Json | null
+          preferred_algorithms?: Json | null
+          style_preferences?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          average_enhancement_strength?: number | null
+          created_at?: string | null
+          favorite_looks?: string[] | null
+          id?: string
+          image_type_preferences?: Json | null
+          preferred_algorithms?: Json | null
+          style_preferences?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_preferences: {
         Row: {
           analysis_intensity: string | null
           auto_analyze: boolean | null
           auto_enhance: boolean | null
+          color_preference: string | null
           created_at: string | null
           custom_settings: Json | null
+          detail_enhancement_level: number | null
           editing_style: string | null
+          enhancement_algorithms: string[] | null
           enhancement_strength: number | null
           id: string
+          noise_reduction_level: number | null
           notify_analysis_complete: boolean | null
           notify_processing_complete: boolean | null
           preserve_originals: boolean | null
@@ -162,11 +281,15 @@ export type Database = {
           analysis_intensity?: string | null
           auto_analyze?: boolean | null
           auto_enhance?: boolean | null
+          color_preference?: string | null
           created_at?: string | null
           custom_settings?: Json | null
+          detail_enhancement_level?: number | null
           editing_style?: string | null
+          enhancement_algorithms?: string[] | null
           enhancement_strength?: number | null
           id?: string
+          noise_reduction_level?: number | null
           notify_analysis_complete?: boolean | null
           notify_processing_complete?: boolean | null
           preserve_originals?: boolean | null
@@ -178,11 +301,15 @@ export type Database = {
           analysis_intensity?: string | null
           auto_analyze?: boolean | null
           auto_enhance?: boolean | null
+          color_preference?: string | null
           created_at?: string | null
           custom_settings?: Json | null
+          detail_enhancement_level?: number | null
           editing_style?: string | null
+          enhancement_algorithms?: string[] | null
           enhancement_strength?: number | null
           id?: string
+          noise_reduction_level?: number | null
           notify_analysis_complete?: boolean | null
           notify_processing_complete?: boolean | null
           preserve_originals?: boolean | null
@@ -316,6 +443,40 @@ export type TablesUpdate<
       }
       ? U
       : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
 
 export const Constants = {

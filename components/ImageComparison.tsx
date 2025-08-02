@@ -178,12 +178,14 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     position: 'relative',
-    aspectRatio: 1,
+    minHeight: 300,
+    maxHeight: 500,
     backgroundColor: '#F2F2F7',
   },
   baseImage: {
     width: '100%',
     height: '100%',
+    minHeight: 300,
   },
   overlayContainer: {
     position: 'absolute',
@@ -195,6 +197,7 @@ const styles = StyleSheet.create({
   overlayImage: {
     width: width - 32, // Full container width
     height: '100%',
+    minHeight: 300,
   },
   sliderContainer: {
     position: 'absolute',

@@ -32,3 +32,30 @@ export const userPreferencesKeys = {
   all: ['user_preferences'] as const,
   byUser: (userId: string) => ['user_preferences', 'user', userId] as const,
 };
+
+export const imageEditingSessionKeys = {
+  all: ['image_editing_sessions'] as const,
+  byId: (id: string) => ['image_editing_sessions', id] as const,
+  byUser: (userId: string) => ['image_editing_sessions', 'user', userId] as const,
+  byImage: (imageId: string) => ['image_editing_sessions', 'image', imageId] as const,
+  byUserImage: (userId: string, imageId: string) => ['image_editing_sessions', 'user', userId, 'image', imageId] as const,
+  stats: (userId: string) => ['image_editing_sessions', 'user', userId, 'stats'] as const,
+};
+
+export const userEditingProfileKeys = {
+  all: ['user_editing_profiles'] as const,
+  byUser: (userId: string) => ['user_editing_profiles', 'user', userId] as const,
+};
+
+export const editingFeedbackKeys = {
+  all: ['editing_feedback'] as const,
+  bySession: (sessionId: string) => ['editing_feedback', 'session', sessionId] as const,
+  byUser: (userId: string) => ['editing_feedback', 'user', userId] as const,
+  byType: (userId: string, type: string) => ['editing_feedback', 'user', userId, 'type', type] as const,
+};
+
+export const popularConfigKeys = {
+  all: ['popular_configs'] as const,
+  byImageType: (imageType: string) => ['popular_configs', 'image_type', imageType] as const,
+  general: ['popular_configs', 'general'] as const,
+};

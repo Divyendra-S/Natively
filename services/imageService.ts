@@ -146,9 +146,9 @@ export class ImageService {
     try {
       console.log('Starting image upload for user:', userId);
       
-      // Compress image before upload
-      const compressedUri = await this.compressImage(uri);
-      console.log('Image compressed successfully');
+      // Skip compression to preserve quality
+      const compressedUri = uri; // Use original URI without compression
+      console.log('Image quality preserved - no compression applied');
       
       // Read file info to get size
       const fileInfo = await FileSystem.getInfoAsync(compressedUri);

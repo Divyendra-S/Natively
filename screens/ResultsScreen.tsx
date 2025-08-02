@@ -142,7 +142,7 @@ export default function ResultsScreen() {
 
   return (
     <>
-      <StatusBar style="dark" backgroundColor="#F2F2F7" />
+      <StatusBar style="dark" />
       <SafeAreaView style={styles.container} edges={['left', 'right']}>
       
       {/* Header */}
@@ -388,7 +388,8 @@ const styles = StyleSheet.create({
   },
   singleImage: {
     width: '100%',
-    aspectRatio: 1,
+    minHeight: 300,
+    maxHeight: 500,
   },
   analysisContainer: {
     backgroundColor: '#FFFFFF',
